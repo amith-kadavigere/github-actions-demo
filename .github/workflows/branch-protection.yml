@@ -1,0 +1,77 @@
+name: Set Branch Protection Rules
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - test
+      - dev
+  workflow_dispatch:
+
+jobs:
+  set-branch-protection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set Branch Protection Rules for Main
+        uses: Godzilla-0/branch-guardian@v1.0.0
+        with:
+          PERSONAL-ACCESS-TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          BASE-BRANCH-PATTERN: "^main$"
+          REQUIRED-NUMBER-OF-REVIEWERS: 1
+          REQUIRED-STATUS-CHECKS: ci/circleci: build, ci/circleci: test
+          REQUIRE-REVIEW-FROM-CODEOWNERS: true
+          DISMISS-STALE-PR-APPROVALS-ON-NEW-COMMITS: true
+          REQUIRE-LINEAR-HISTORY: true
+          INCLUDE-ADMINISTRATORS: true
+          RESTRICTIONS-USERS: ''
+          RESTRICTIONS-TEAMS: 'maintainers'
+          ONLY-FROM-BRANCHES: staging
+
+      - name: Set Branch Protection Rules for Staging
+        uses: Godzilla-0/branch-guardian@v1.0.0
+        with:
+          PERSONAL-ACCESS-TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          BASE-BRANCH-PATTERN: "^staging$"
+          REQUIRED-NUMBER-OF-REVIEWERS: 1
+          REQUIRED-STATUS-CHECKS: ci/circleci: build, ci/circleci: test
+          REQUIRE-REVIEW-FROM-CODEOWNERS: true
+          DISMISS-STALE-PR-APPROVALS-ON-NEW-COMMITS: true
+          REQUIRE-LINEAR-HISTORY: true
+          INCLUDE-ADMINISTRATORS: true
+          RESTRICTIONS-USERS: ''
+          RESTRICTIONS-TEAMS: 'maintainers'
+          ONLY-FROM-BRANCHES: test
+
+      - name: Set Branch Protection Rules for Test
+        uses: Godzilla-0/branch-guardian@v1.0.0
+        with:
+          PERSONAL-ACCESS-TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          BASE-BRANCH-PATTERN: "^test$"
+          REQUIRED-NUMBER-OF-REVIEWERS: 1
+          REQUIRED-STATUS-CHECKS: ci/circleci: build, ci/circleci: test
+          REQUIRE-REVIEW-FROM-CODEOWNERS: true
+          DISMISS-STALE-PR-APPROVALS-ON-NEW-COMMITS: true
+          REQUIRE-LINEAR-HISTORY: true
+          INCLUDE-ADMINISTRATORS: true
+          RESTRICTIONS-USERS: ''
+          RESTRICTIONS-TEAMS: 'maintainers'
+          ONLY-FROM-BRANCHES: dev
+
+      - name: Set Branch Protection Rules for Dev
+        uses: Godzilla-0/branch-guardian@v1.0.0
+        with:
+          PERSONAL-ACCESS-TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          BASE-BRANCH-PATTERN: "^dev$"
+          REQUIRED-NUMBER-OF-REVIEWERS: 1
+          REQUIRED-STATUS-CHECKS: ci/circleci: build, ci/circleci: test
+          REQUIRE-REVIEW-FROM-CODEOWNERS: true
+          DISMISS-STALE-PR-APPROVALS-ON-NEW-COMMITS: true
+          REQUIRE-LINEAR-HISTORY: true
+          INCLUDE-ADMINISTRATORS: true
+          RESTRICTIONS-USERS: ''
+          RESTRICTIONS-TEAMS: 'maintainers'
+          ONLY-FROM-BRANCHES: feature/*
